@@ -2,16 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 
-class ArticleController extends Controller
+class AdminArticleController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(): View
+    {
+        $articles = Article::with('tags')->get();
+
+        return view('admin.index', compact('articles'));
+    }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return view('admin.create');
     }
 
     /**
