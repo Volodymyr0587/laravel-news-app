@@ -48,7 +48,7 @@
                                     {{ $article->created_at }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $article->article->updated_at }}
+                                    {{ $article->updated_at }}
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex space-x-2">
