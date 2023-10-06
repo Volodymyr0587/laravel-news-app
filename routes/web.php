@@ -32,7 +32,9 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('admin')->group(function () {
     Route::get('/articles', [AdminArticleController::class, 'index'])->name('admin.index');
-    Route::get('/articles', [AdminArticleController::class, 'create'])->name('admin.create');
+    Route::get('/article/create', [AdminArticleController::class, 'create'])->name('admin.create');
+    Route::post('/articles', [AdminArticleController::class, 'store'])->name('admin.store');
+    Route::delete('/article/{article}', [AdminArticleController::class, 'destroy'])->name('admin.destroy');
 });
 
 require __DIR__.'/auth.php';

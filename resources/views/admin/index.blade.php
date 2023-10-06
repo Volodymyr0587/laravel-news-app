@@ -54,7 +54,7 @@
                                     <div class="flex space-x-2">
                                          <a href="#" {{--{{ route('events.edit', $event) }} --}}
                                             class="text-green-400 hover:text-green-600">Edit</a>
-                                        <form method="POST" {{-- action="{{ route('events.destroy', $event) }}"  --}}
+                                        <form method="POST" action="{{ route('admin.destroy', $article) }}"
                                             class="text-red-400 hover:text-red-600"
                                             onsubmit="return confirm('Are you sure?');">
                                             @csrf
@@ -69,7 +69,7 @@
                         @empty
                             <tr>
                                 <td colspan="4" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                                    No events found
+                                    No articles found
                                 </td>
                             </tr>
                         @endforelse
