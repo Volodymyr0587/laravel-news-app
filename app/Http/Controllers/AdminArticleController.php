@@ -104,14 +104,9 @@ class AdminArticleController extends Controller
         // Додаємо посилання на інші статті
         $article->addLinks();
         $article->removeLinks();
-        // $article->update($data);
+
 
         return to_route('admin.index');
-
-
-        // $article->update($data);
-        // $event->tags()->sync($request->tags);
-        // return to_route('events.index');
     }
 
     /**
