@@ -23,7 +23,9 @@ class Article extends Model
     public function checkUniqueTags()
     {
         // get all the tags in the database
-        $allTags = Article::pluck('tags')->flatten()->unique()->toArray();
+        // $allTags = Article::pluck('tags')->flatten()->unique()->toArray();
+        $allTags = Article::pluck('tags')->toArray();
+
         // dd($allTags);
         // get the tags of the current article
         $tags = explode(' ', $this->tags);
@@ -31,7 +33,7 @@ class Article extends Model
 
         // compare the tags of the current article with all tags in the database
         $uniqueTags = array_diff($tags, $allTags);
-        dd($uniqueTags);
+        // dd($uniqueTags);
 
         // If there are unique tags, we issue a message
         if (!empty($uniqueTags)) {

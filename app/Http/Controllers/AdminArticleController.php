@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreArticleRequest;
+use App\Http\Requests\UpdateArticleRequest;
 use App\Models\Article;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Storage;
@@ -69,17 +70,48 @@ class AdminArticleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Article $article)
     {
-        //
+        $tags = Tag::all();
+        return view('admin.edit', compact('article', 'tags'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateArticleRequest $request, Article $article)
     {
-        //
+        $data = $request->validated();
+
+        if ($request->hasFile('photo')) {
+            Storage::delete($article->photo);
+            $data['photo'] = Storage::putFile('atricles', $request->file('photo'));
+        }
+
+        $article->update($data);
+
+
+        // $article->tags()->attach($request->tags);
+
+        // Перевіряємо, чи є унікальні теги
+        $uniqueTags = $article->checkUniqueTags();
+        // dd($uniqueTags);
+        // Якщо є унікальні теги, то видаємо повідомлення
+        if (!empty($uniqueTags)) {
+            return to_route('admin.index')->with('tag_message', $uniqueTags);
+        }
+
+        // Додаємо посилання на інші статті
+        $article->addLinks();
+        $article->removeLinks();
+        // $article->update($data);
+
+        return to_route('admin.index');
+
+
+        // $article->update($data);
+        // $event->tags()->sync($request->tags);
+        // return to_route('events.index');
     }
 
     /**
