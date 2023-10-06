@@ -10,7 +10,8 @@
             <div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 overflow-hidden shadow-sm sm:rounded-lg">
                 {{-- <div class="p-6 text-gray-900 dark:text-gray-100"> --}}
 
-                    @if (Auth::user()->is_admin)
+                    {{-- @if (Auth::user()->is_admin) --}}
+                    @admin
 
                     <form method="POST" action="" enctype="multipart/form-data"
                         class="p-4 bg-white dark:bg-slate-800 rounded-md">
@@ -67,7 +68,7 @@
                     <div class="p-6">
                         {{ __("You're logged in!") }}
                     </div>
-                    @endif
+                    @endadmin
                 {{-- </div> --}}
             </div>
         </div>
