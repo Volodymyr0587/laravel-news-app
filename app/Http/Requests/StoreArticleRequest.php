@@ -25,7 +25,6 @@ class StoreArticleRequest extends FormRequest
             'title' => 'required|max:255',
             'photo' => 'required|image',
             'content' => 'required',
-            // 'active' => 'nullable',
             'tags' => 'required',
         ];
     }
