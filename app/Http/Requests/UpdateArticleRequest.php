@@ -25,7 +25,7 @@ class UpdateArticleRequest extends FormRequest
             'title' => 'required|max:255',
             'photo' => 'required|image',
             'content' => 'required',
-            'active' => 'boolean',
+            // 'active' => 'boolean',
             'tags' => 'required',
         ];
     }

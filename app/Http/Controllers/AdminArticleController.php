@@ -41,9 +41,9 @@ class AdminArticleController extends Controller
             $data['photo'] = Storage::putFile('articles', $request->file('photo'));
             $data['user_id'] = auth()->id();
             $data['tags'] = preg_replace('/\s+/', ' ', trim(strtolower($request->tags)));
+            $data['active'] = $request->active ? 1 : 0;
 
-            $article = new Article($data);
-            $article->save();
+            $article = Article::create($data);
 
             // $article->tags()->attach($request->tags);
 
@@ -87,6 +87,8 @@ class AdminArticleController extends Controller
             Storage::delete($article->photo);
             $data['photo'] = Storage::putFile('atricles', $request->file('photo'));
         }
+
+        $data['active'] = $request->active ? 1 : 0;
 
         $article->update($data);
 
