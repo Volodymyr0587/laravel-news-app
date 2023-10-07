@@ -1,4 +1,4 @@
-<x-app-layout>
+{{-- <x-app-layout>
     <!-- component -->
     <section class="bg-white dark:bg-gray-900">
         <div class="container px-6 py-10 mx-auto">
@@ -30,8 +30,8 @@
             </div>
         </div>
         {{-- pagination  --}}
-        <div class="m-2 p-2">
+        {{-- <div class="m-2 p-2">
             {{ $articles->links() }}
         </div>
     </section>
-</x-app-layout>
+</x-app-layout> --}}

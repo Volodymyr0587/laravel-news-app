@@ -37,10 +37,10 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('admin')->group(function () {
+    Route::get('/articles/create', [AdminArticleController::class, 'create'])->name('admin.create');
     Route::get('/articles', [AdminArticleController::class, 'index'])->name('admin.index');
-    Route::get('/article/create', [AdminArticleController::class, 'create'])->name('admin.create');
     Route::post('/article', [AdminArticleController::class, 'store'])->name('admin.store');
-    Route::get('article/edit/{article}', [AdminArticleController::class, 'edit'])->name('admin.edit');
+    Route::get('/article/edit/{article}', [AdminArticleController::class, 'edit'])->name('admin.edit');
     Route::put('/article/{article}', [AdminArticleController::class, 'update'])->name('admin.update');
     Route::delete('/article/{article}', [AdminArticleController::class, 'destroy'])->name('admin.destroy');
 });
