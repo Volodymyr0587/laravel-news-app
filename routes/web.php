@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminArticleController;
+use App\Http\Controllers\ArticleIndexController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,9 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+Route::get('/', ArticleIndexController::class)->name('welcome');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

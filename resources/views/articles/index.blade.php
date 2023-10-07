@@ -2,80 +2,37 @@
     <x-slot name="header">
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Events') }}
+                {{ __('All our articles') }}
             </h2>
-
-            <a href="{{ route('events.create') }}"
-                class="group relative text-center pt-2 overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-700 text-lg shadow-md sm:w-36 sm:h-10 md:w-48 md:h-12 lg:h-16 xl:h-16">
-                <div
-                    class="absolute inset-0 w-3 bg-amber-400 transition-all duration-[250ms] ease-out group-hover:w-full">
-                </div>
-                <span class="relative m-6 text-black group-hover:text-white">New Event</span>
-            </a>
-            <a href="" class="dark:text-white hover:text-slate-200">New Event</a>
-
         </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="relative overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                Title
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Start Date
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Country
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Action
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($events as $event)
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $event->title }}
-                                </th>
-                                <td class="px-6 py-4">
-                                    {{ $event->start_date }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{ $event->country->name }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex space-x-2">
-                                        <a href="{{ route('events.edit', $event) }}"
-                                            class="text-green-400 hover:text-green-600">Edit</a>
-                                        <form method="POST" action="{{ route('article.destroy', $article) }}"
-                                            class="text-red-400 hover:text-red-600"
-                                            onsubmit="return confirm('Are you sure?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                                    No events found
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+    <div class="container px-6 py-10 mx-auto">
+        <div class="grid grid-cols-1 gap-8 mt-8 md:mt-16 md:grid-cols-2">
+            @forelse ($articles as $article)
+                <div class="lg:flex">
+                    <img class="object-cover w-full h-56 rounded-lg lg:w-64"
+                        src="{{ asset('/storage/' . $article->photo) }}" alt="{{ $article->title }}">
+
+                    <div class="flex flex-col justify-between py-6 lg:mx-6">
+                        <a href="#" {{-- "{{ route('articleShow', $article->id) }}" --}}
+                            class="text-xl font-semibold text-gray-800 hover:underline dark:text-white ">
+                            {{ $article->title }}
+                        </a>
+
+
+                    </div>
+                </div>
+            @empty
+                <p class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white">
+                    Unfortunately, there is nothing interesting yet :(
+                    Be sure to come back a little later.
+                </p>
+            @endforelse
+        </div>
+        {{-- pagination  --}}
+        <div class="m-8 p-2">
+            {{ $articles->links() }}
         </div>
     </div>
 </x-app-layout>
