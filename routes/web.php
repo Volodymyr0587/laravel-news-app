@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminArticleController;
 use App\Http\Controllers\ArticleIndexController;
+use App\Http\Controllers\ArticleShowController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+
 Route::get('/', ArticleIndexController::class)->name('welcome');
+Route::get('/article/{id}', ArticleShowController::class)->name('articleShow');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -32,8 +39,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware('admin')->group(function () {
     Route::get('/articles', [AdminArticleController::class, 'index'])->name('admin.index');
     Route::get('/article/create', [AdminArticleController::class, 'create'])->name('admin.create');
+    Route::post('/article', [AdminArticleController::class, 'store'])->name('admin.store');
     Route::get('article/edit/{article}', [AdminArticleController::class, 'edit'])->name('admin.edit');
-    Route::post('/articles', [AdminArticleController::class, 'store'])->name('admin.store');
     Route::put('/article/{article}', [AdminArticleController::class, 'update'])->name('admin.update');
     Route::delete('/article/{article}', [AdminArticleController::class, 'destroy'])->name('admin.destroy');
 });

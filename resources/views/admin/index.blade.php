@@ -12,7 +12,6 @@
                 </div>
                 <span class="relative m-6 text-black group-hover:text-white">New Article</span>
             </a>
-            {{-- <a href="{{ route('events.create') }}" class="dark:text-white hover:text-slate-200">New Event</a> --}}
 
         </div>
     </x-slot>
