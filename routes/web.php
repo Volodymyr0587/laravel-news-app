@@ -17,12 +17,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('welcome');
+});
 
 
-Route::get('/', ArticleIndexController::class)->name('welcome');
+Route::get('/home', ArticleIndexController::class)->name('welcome');
 Route::get('/article/{id}', ArticleShowController::class)->name('articleShow');
 
 Route::get('/dashboard', function () {

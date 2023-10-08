@@ -1,6 +1,6 @@
-{{-- <x-app-layout>
+<x-app-layout>
     <!-- component -->
-    <section class="bg-white dark:bg-gray-900">
+    {{-- <section class="bg-white dark:bg-gray-900">
         <div class="container px-6 py-10 mx-auto">
             <h1 class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white">
                 Latest Articles
@@ -32,6 +32,6 @@
         {{-- pagination  --}}
         {{-- <div class="m-2 p-2">
             {{ $articles->links() }}
-        </div>
-    </section>
-</x-app-layout> --}}
+        </div> --}}
+    {{-- </section>  --}}
+</x-app-layout>

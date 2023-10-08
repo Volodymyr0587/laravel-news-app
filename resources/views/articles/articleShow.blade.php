@@ -18,9 +18,13 @@
 
                 <div class="mt-6 lg:w-1/2 lg:mt-0 lg:mx-6 ">
                     <p class="mt-3 text-sm text-gray-500 dark:text-gray-300 md:text-sm">
-                        {{ $article->content }}
+                        {!! $article->content !!}
                     </p>
                 </div>
+            </div>
+
+            <div>
+                <a href="{{ URL::previous() }}" class="text-blue-500 underline">Back</a>
             </div>
 
         </div>
