@@ -11,7 +11,7 @@ class ArticleIndexController extends Controller
      */
     public function __invoke()
     {
-        $articles = Article::with('tags')->orderBy('created_at', 'desc')->paginate(4);
+        $articles = Article::with('tags')->where('active', 1)->orderBy('created_at', 'desc')->paginate(4);
         return view('articles.index', compact('articles'));
     }
 }
