@@ -103,7 +103,7 @@ class AdminArticleController extends Controller
     public function destroy(Article $article)
     {
         $article->tags()->sync([]);
-        $article->tags()->detach($article->tags);
+        // $article->tags()->detach($article->tags);
         Storage::delete($article->photo);
 
         $article->delete();
