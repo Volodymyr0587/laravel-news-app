@@ -25,7 +25,7 @@
             <div class="m-4 dark:text-white">
                 <p>Tags: {{ $article->tags }}</p>
                 <p>Related Articles: </p>
-                @foreach ($realatedArticles as $relatedArticle)
+                @foreach ($relatedArticles as $relatedArticle)
                     <ul>
                         <li class="p-2"><a href="{{ route('articleShow', $relatedArticle->id) }}"> {{ $relatedArticle->title }}</a></li>
                     </ul>
