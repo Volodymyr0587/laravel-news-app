@@ -19,7 +19,7 @@
                             class="text-xl font-semibold text-gray-800 hover:underline dark:text-white ">
                             {{ $article->title }}
                         </a>
-
+                        <p class="text-sm dark:text-white">{{ $article->created_at->diffForHumans() }}</p>
 
                     </div>
                 </div>

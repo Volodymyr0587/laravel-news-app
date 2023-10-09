@@ -22,8 +22,10 @@
                     </p>
                 </div>
             </div>
-
-            <div>
+            <div class="m-4 dark:text-white">
+                Tags: {{ $article->tags }}
+            </div>
+            <div class="mt-4">
                 <a href="{{ URL::previous() }}" class="text-blue-500 underline">Back</a>
             </div>
 
