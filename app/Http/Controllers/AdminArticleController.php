@@ -32,124 +32,132 @@ class AdminArticleController extends Controller
         return view('admin.create'); //, compact('tags'));
     }
 
+
+    public function store(StoreArticleRequest $request)
+    {
+        if ($request->hasFile('photo')) {
+            $validatedData = $request->validated();
+            $validatedData['photo'] = Storage::putFile('articles', $request->file('photo'));
+            $validatedData['user_id'] = auth()->id();
+            $validatedData['active'] = $request->active ? 1 : 0;
+
+            $article = Article::create($validatedData);
+
+            // Перевірка та оновлення інших статей
+            foreach (explode(' ', $validatedData['tags']) as $tag) {
+                $existingArticle = Article::whereHas('tags', function ($query) use ($tag) {
+                    $query->where('name', $tag);
+                })->get();
+                // dd($existingArticle);
+                foreach ($existingArticle as $existing) {
+                    if (!in_array($tag, explode(' ', $existing->tags))) {
+                        $existing->tags()->attach(Tag::find($tag));
+                    }
+                }
+            }
+            return to_route('admin.index');
+        }
+        return back();
+    }
     // public function store(StoreArticleRequest $request)
     // {
+
     //     if ($request->hasFile('photo')) {
 
     //         $data = $request->validated();
     //         $data['photo'] = Storage::putFile('articles', $request->file('photo'));
     //         $data['user_id'] = auth()->id();
-    //         $data['tags'] = preg_replace('/\s+/', ' ', trim(strtolower($request->tags)));
+    //         foreach (explode(' ', preg_replace('/\s+/', ' ', trim(strtolower($request->tags)))) as $tag) {
+    //             $tag = Tag::create(['name' => $tag, 'slug' => $tag, ]);
+    //             $data['tags'] = $tag->name;
+    //         }
+
     //         $data['active'] = $request->active ? 1 : 0;
 
     //         $article = Article::create($data);
 
-    //         $tags = explode(' ', $data['tags']);
+
+    //         $tags = explode(' ', $request->input('tags'));
+    //         // dd($tags);
 
     //         // Перевіряємо чи існують теги в інших статтях
     //         $uniqueTags = array_filter($tags, function ($tag) use ($article) {
     //             return !$article->tags()->where('name', $tag)->exists();
     //         });
-    //         // dd($uniqueTags);
+    //         // Перевіряємо, чи існують теги в таблиці `tags`
+    //         $existingTags = Tag::whereIn('name', $tags)->pluck('id')->toArray();
 
     //         // Додаємо теги до статті
     //         foreach ($uniqueTags as $tag) {
-    //             $tag = Tag::where('name', $tag)->first();
-    //             if ($tag) {
-    //                 $article->tags()->attach($tag->id);
+    //             if (!in_array($tag, $existingTags)) {
+    //                 $tag = Tag::create(['name' => $tag, 'slug' => strtolower($tag)]);
+    //                 $existingTags[] = $tag->id;
     //             }
 
+    //             $article->tags()->attach($existingTags);
     //         }
 
     //         // Оновлюємо всі статті, де зустрічаються ці теги
-    //         $this->updateArticles($tags);
+    //         $this->updateArticles($article);
 
     //         return to_route('admin.index');
     //     }
-
     //     return back();
     // }
 
 
-    public function store(StoreArticleRequest $request)
-    {
-        DB::beginTransaction();
-
-        if ($request->hasFile('photo')) {
-
-            $data = $request->validated();
-            $data['photo'] = Storage::putFile('articles', $request->file('photo'));
-            $data['user_id'] = auth()->id();
-            $data['tags'] = preg_replace('/\s+/', ' ', trim(strtolower($request->tags)));
-            $data['active'] = $request->active ? 1 : 0;
-
-            $article = Article::create($data);
 
 
-            $tags = explode(',', $request->input('tags'));
+    // private function updateArticles(Article $article)
+    // {
+    //     $tags = $article->tags->get(); // отримуємо статті, пов'язані з цим тегом
 
-            // Перевіряємо чи існують теги в інших статтях
-            $uniqueTags = array_filter($tags, function ($tag) use ($article) {
-                return !$article->tags()->where('name', $tag)->exists();
-            });
-            // Проверяем, существуют ли эти теги в таблице `tags`
-            $existingTags = Tag::whereIn('name', $tags)->pluck('id')->toArray();
 
-            // Добавляем теги к статье
-            foreach ($uniqueTags as $tag) {
-                if (!in_array($tag, $existingTags)) {
-                    $tag = Tag::create(['name' => $tag, 'slug' => strtolower($tag)]);
-                    $existingTags[] = $tag->id;
-                }
+    //     foreach ($tags as $tag) {
+    //         $relatedArticles = $tag->articles;
 
-                $article->tags()->attach($existingTags);
-            }
-
-            // Обновляем все статьи, где встречаются эти теги
-            $this->updateArticles($tags);
-
-            DB::commit();
-
-            return to_route('admin.index');
-        }
-        return back();
-    }
+    //         foreach ($relatedArticles as $relatedArticle) {
+    //             // Змінюємо теги в тексті статті на посилання
+    //             $article->content = str_replace($tag->name, '<a href="'. route('articleShow', $relatedArticle->id) . '">' . $tag->name . '</a>', $article->content);
+    //         }
+    //     }
+    // }
 
     // Оновлюємо всі статті, де зустрічаються ці теги
-    private function updateArticles($tags)
-    {
-        $articles = Article::all();
+    // private function updateArticles($tags)
+    // {
+    //     $articles = Article::all();
 
-        foreach ($articles as $article) {
-            // Перевіряємо, чи зустрічаються в тексті статті ці теги
-            $articlesTags = $this->getArticleTags($article->content, $tags);
-            // dd($articlesTags);
-            // Додаємо посилання на статті в тексті
-            foreach ($articlesTags as $tag) {
-                $article->content = str_replace($tag, '<a href="/articles/' . $tag . '">' . $tag . '</a>', $article->content);
-            }
+    //     foreach ($articles as $article) {
+    //         // Перевіряємо, чи зустрічаються в тексті статті ці теги
+    //         $articlesTags = $this->getArticleTags($article->content, $tags);
+    //         // dd($articlesTags);
+    //         // Додаємо посилання на статті в тексті
+    //         foreach ($articlesTags as $tag) {
+    //             $article->content = str_replace($tag, '<a href="/articles/' . $tag . '">' . $tag . '</a>', $article->content);
+    //         }
 
-            // Зберігаємо статтю
-            $article->save();
-        }
-    }
+    //         // Зберігаємо статтю
+    //         $article->save();
+    //     }
+    // }
 
     // Отримуємо теги з текста статті
-    private function getArticleTags($content, $tags)
-    {
-        $articleTags = [];
+    // private function getArticleTags($content, $tags)
+    // {
+    //     $articleTags = [];
 
-        foreach ($tags as $tag) {
-            if (str_contains($content, $tag)) {
-                $tag = Tag::where('name', $tag)->first();
-                if ($tag) {
-                    $articleTags[] = $tag;
-                }
-            }
-        }
+    //     foreach ($tags as $tag) {
+    //         if (str_contains($content, $tag)) {
+    //             $tag = Tag::where('name', $tag)->first();
+    //             if ($tag) {
+    //                 $articleTags[] = $tag;
+    //             }
+    //         }
+    //     }
 
-        return $articleTags;
-    }
+    //     return $articleTags;
+    // }
 
 
     /**
@@ -191,7 +199,7 @@ class AdminArticleController extends Controller
     public function destroy(Article $article)
     {
         Storage::delete($article->photo);
-        $article->tags()->detach($article->tags->pluck('id'));
+        // $article->tags()->detach($article->tags);
         $article->delete();
 
         return to_route('admin.index');
