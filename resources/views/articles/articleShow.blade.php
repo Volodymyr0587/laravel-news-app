@@ -23,11 +23,11 @@
                 </div>
             </div>
             <div class="m-4 dark:text-white">
-                <p>Tags: {{ $article->tags }}</p>
+                <p class="text-sm">Tags: {{ $article->tags }}</p>
                 <p>Related Articles: </p>
                 @foreach ($relatedArticles as $relatedArticle)
                     <ul>
-                        <li class="p-2"><a href="{{ route('articleShow', $relatedArticle->id) }}"> {{ $relatedArticle->title }}</a></li>
+                        <li class="ml-4 p-2"><a href="{{ route('articleShow', $relatedArticle->id) }}" class="text-blue-600 hover:text-blue-400"> {{ $relatedArticle->title }}</a></li>
                     </ul>
                 @endforeach
 
