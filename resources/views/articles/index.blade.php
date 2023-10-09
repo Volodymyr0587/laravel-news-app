@@ -25,7 +25,7 @@
                 </div>
             @empty
                 <p class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white">
-                    Unfortunately, there is nothing interesting yet :(
+                    Unfortunately, there is nothing interesting yet:(
                     Be sure to come back a little later.
                 </p>
             @endforelse

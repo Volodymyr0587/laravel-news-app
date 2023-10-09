@@ -16,7 +16,7 @@ class Article extends Model
         'photo',
         'content',
         'active',
-        'tags',
+        // 'tags',
     ];
 
     public function tags(): BelongsToMany
