@@ -16,6 +16,8 @@ npm install
 
 npm run dev
 
+php artisan storage:link 
+
 php artisan serve
 
 Register new users.
