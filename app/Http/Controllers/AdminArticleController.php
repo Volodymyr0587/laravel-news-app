@@ -61,9 +61,9 @@ class AdminArticleController extends Controller
                 foreach ($tags as $tag) {
                     // $pattern = '/\b' . $tag . '\b/';
                     // $pattern = '/\b' . preg_quote($tag, '/') . '\b/';
-                    // $pattern = '/\b' . $tag . '\b/';
+                    $pattern = '/' . $tag . '/';
                     $tagLink = route('articleShow', $article->id);
-                    // $content = preg_replace('/\b' . preg_quote($tag, '/') . '\b/', "<a href='$tagLink' class='text-blue-500 underline'>$tag</a>", $content);
+                    // $content = preg_replace($pattern, "<a href='$tagLink' class='text-blue-500 underline'>$tag</a>", $content);
                     $content = str_replace($tag, "<a href='$tagLink' class='text-blue-500 underline'>$tag</a>", $content);
                     // $content = preg_replace('/\b' . $tag . '\b/', "<a href='$tagLink' class='text-blue-500 underline'>$tag</a>", $content);
                     // $replacement = '<a href="' . route('articleShow', $article->id)  . '" class="text-blue-500 underline">' . $tag . '</a>';
