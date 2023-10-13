@@ -32,7 +32,6 @@ class AdminArticleController extends Controller
         return view('admin.create'); //, compact('tags'));
     }
 
-
     public function store(StoreArticleRequest $request)
     {
         if ($request->hasFile('photo')) {
@@ -47,18 +46,39 @@ class AdminArticleController extends Controller
                 $tag = Tag::firstOrCreate(['name' => $tagName, 'slug' => $tagName]);
                 $article->tags()->attach($tag->id);
             }
-            // Перевірка та оновлення інших статей
-            // foreach (explode(' ', $validatedData['tags']) as $tag) {
-            //     $existingArticle = Article::whereHas('tags', function ($query) use ($tag) {
-            //         $query->where('name', $tag);
-            //     })->get();
-            //     // dd($existingArticle);
-            //     foreach ($existingArticle as $existing) {
-            //         if (!in_array($tag, explode(' ', $existing->tags))) {
-            //             $existing->tags()->attach(Tag::find($tag));
-            //         }
-            //     }
-            // }
+
+            $tags = explode(' ', $article->tags);
+
+            $relatedArticles = Article::whereHas('tags', function ($query) use ($tags) {
+                $query->whereIn('name', $tags);
+            })->whereNotIn('id', [$article->id])->get();
+
+
+            foreach ($relatedArticles as $relatedArticle) {
+                $content = $relatedArticle->content;
+
+                // dd($relatedArticle);
+                foreach ($tags as $tag) {
+                    // $pattern = '/\b' . $tag . '\b/';
+                    // $pattern = '/\b' . preg_quote($tag, '/') . '\b/';
+                    // $pattern = '/\b' . $tag . '\b/';
+                    $tagLink = route('articleShow', $article->id);
+                    // $content = preg_replace('/\b' . preg_quote($tag, '/') . '\b/', "<a href='$tagLink' class='text-blue-500 underline'>$tag</a>", $content);
+                    $content = str_replace($tag, "<a href='$tagLink' class='text-blue-500 underline'>$tag</a>", $content);
+                    // $content = preg_replace('/\b' . $tag . '\b/', "<a href='$tagLink' class='text-blue-500 underline'>$tag</a>", $content);
+                    // $replacement = '<a href="' . route('articleShow', $article->id)  . '" class="text-blue-500 underline">' . $tag . '</a>';
+                    // $content = preg_replace($pattern, $replacement, $content);
+                    // dd($content);
+                    // $content = str_replace($content, $replacement, $relatedArticle);
+                    // $relatedArticle->content = $content;
+                }
+                $relatedArticle->content = $content;
+
+                $relatedArticle->save();
+
+                $article->content = $relatedArticle->content;
+
+            }
             return to_route('admin.index');
         }
         return back();
