@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Tag;
 use App\Models\Article;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
@@ -27,8 +26,6 @@ class AdminArticleController extends Controller
      */
     public function create()
     {
-        // dd('NEW ARTICLE');
-        // $tags = Tag::all();
         return view('admin.create'); //, compact('tags'));
     }
 
@@ -47,7 +44,7 @@ class AdminArticleController extends Controller
                 $article->tags()->attach($tag->id);
             }
 
-            $tags = explode(' ', $article->tags);
+            $tags = $article->tags->pluck('name')->all();
 
             $relatedArticles = Article::whereHas('tags', function ($query) use ($tags) {
                 $query->whereIn('name', $tags);
@@ -57,20 +54,11 @@ class AdminArticleController extends Controller
             foreach ($relatedArticles as $relatedArticle) {
                 $content = $relatedArticle->content;
 
-                // dd($relatedArticle);
                 foreach ($tags as $tag) {
-                    // $pattern = '/\b' . $tag . '\b/';
-                    // $pattern = '/\b' . preg_quote($tag, '/') . '\b/';
-                    $pattern = '/' . $tag . '/';
                     $tagLink = route('articleShow', $article->id);
                     // $content = preg_replace($pattern, "<a href='$tagLink' class='text-blue-500 underline'>$tag</a>", $content);
                     $content = str_replace($tag, "<a href='$tagLink' class='text-blue-500 underline'>$tag</a>", $content);
-                    // $content = preg_replace('/\b' . $tag . '\b/', "<a href='$tagLink' class='text-blue-500 underline'>$tag</a>", $content);
-                    // $replacement = '<a href="' . route('articleShow', $article->id)  . '" class="text-blue-500 underline">' . $tag . '</a>';
-                    // $content = preg_replace($pattern, $replacement, $content);
-                    // dd($content);
-                    // $content = str_replace($content, $replacement, $relatedArticle);
-                    // $relatedArticle->content = $content;
+
                 }
                 $relatedArticle->content = $content;
 
@@ -106,9 +94,6 @@ class AdminArticleController extends Controller
             $data['tags'] = preg_replace('/\s+/', ' ', trim(strtolower($request->tags)));
             $data['active'] = $request->active ? 1 : 0;
 
-
-
-            // $this->processTags($article, explode(" ", $data['tags']));
             $article->update($data);
 
             return to_route('admin.index');
@@ -123,7 +108,7 @@ class AdminArticleController extends Controller
     public function destroy(Article $article)
     {
         $article->tags()->sync([]);
-        // $article->tags()->detach($article->tags);
+
         Storage::delete($article->photo);
 
         $article->delete();

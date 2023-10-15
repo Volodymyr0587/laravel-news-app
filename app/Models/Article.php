@@ -16,12 +16,11 @@ class Article extends Model
         'photo',
         'content',
         'active',
-        'tags',
     ];
 
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Tag::class, 'article_tag');
     }
 
 }
