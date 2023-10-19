@@ -45,11 +45,12 @@ class AdminArticleController extends Controller
             }
 
             $tags = $article->tags->pluck('name')->all();
+            // dd($tags);
 
             $relatedArticles = Article::whereHas('tags', function ($query) use ($tags) {
                 $query->whereIn('name', $tags);
             })->whereNotIn('id', [$article->id])->get();
-
+            // dd($relatedArticles);
 
             foreach ($relatedArticles as $relatedArticle) {
                 $content = $relatedArticle->content;
