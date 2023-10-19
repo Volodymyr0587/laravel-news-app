@@ -23,13 +23,17 @@
                 </div>
             </div>
             <div class="m-4 dark:text-white">
-                <p class="text-sm">Tags: {{ $article->tags }}</p>
-                <p>Related Articles: </p>
+                Tags:
+                @foreach ($article->tags()->get() as $tag)
+                    <p class="text-sm"> {{ $tag->name }}</p>
+                @endforeach
+                {{-- <p class="text-sm">Tags: {{ $article->tags()->get() }}</p> --}}
+                {{-- <p>Related Articles: </p>
                 @foreach ($relatedArticles as $relatedArticle)
                     <ul>
                         <li class="ml-4 p-2"><a href="{{ route('articleShow', $relatedArticle->id) }}" class="text-blue-600 hover:text-blue-400"> {{ $relatedArticle->title }}</a></li>
                     </ul>
-                @endforeach
+                @endforeach --}}
 
             </div>
             <div class="mt-4">
